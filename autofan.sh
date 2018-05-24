@@ -2,9 +2,9 @@
 
 ##############################################################
 ## Thank you very much for your support! It's very impotant!##
-##														    ##
+##							    ##
 ## Nicehash donate: 3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph	    ##
-## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T		    ##
+## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T          ##
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
@@ -17,7 +17,7 @@ MIN_COEF=80
 MAX_COEF=110
 #END VAR
 
-#-----------------
+
 VERSION="2.0"
 s_name="autofan.sh"
 export DISPLAY=:0
@@ -25,9 +25,7 @@ export DISPLAY=:0
 red=$(tput setf 4)
 green=$(tput setf 2)
 reset=$(tput sgr0)
-#--------------------
 
-#--------------USER VAR----------
 function set_var {
 read -p  "Enter DELAY (default 30): "
 if [[ $REPLY > 0 ]]; then DELAY=$REPLY; fi; echo -n "${red}DELAY=$DELAY${reset}"
@@ -55,11 +53,8 @@ echo -n > /home/user/autofan.conf
 echo -e "DELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF" >> /home/user/autofan.conf
 echo "${green}[Status]: ${reset}Config created."		
 }
-#---------------END USER VAR--------------
 
-#------------Check xinit.user.sh----------------
 function check_run {
-
 if [ ! -f "/home/user/xinit.user.sh" ]; then
 		touch /home/user/xinit.user.sh
 		chmod +x /home/user/xinit.user.sh
@@ -76,15 +71,12 @@ else
 echo
 fi
 }
-#--------------END CHECK-------------
 
 function auto_fan {
-
 CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
 echo -e -n "${green}Your current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\n"
 sleep 2
-
 while true
         do
             echo -n "${green}$(date +"%d/%m/%y %T")${reset}"
@@ -140,11 +132,9 @@ else
 echo "${red}[FAIL] ${reset} Please, make a choice."
 ghost_run
 fi
-
 }
 
 if test -f "/home/user/autofan.conf" ; then source /home/user/autofan.conf ; fi
-
 
 if [[ $1 = "-g" ]]; then 
 		auto_fan
