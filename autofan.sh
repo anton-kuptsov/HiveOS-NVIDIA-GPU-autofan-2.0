@@ -8,15 +8,12 @@
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
-#VAR
 DELAY=30
 MIN_SPEED=20
 MIN_TEMP=60
 MAX_TEMP=70
 MIN_COEF=80
 MAX_COEF=110
-#END VAR
-
 
 VERSION="2.0"
 s_name="autofan.sh"
