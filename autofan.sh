@@ -2,9 +2,9 @@
 
 ##############################################################
 ## Thank you very much for your support! It's very impotant!##
-##														    ##
+##							    ##
 ## Nicehash donate: 3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph	    ##
-## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T		    ##
+## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T	    ##
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
