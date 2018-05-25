@@ -13,7 +13,7 @@ For navigation use commands : ```pwd``` (current dir), ```cd ..``` (level up), `
 (or download and put autofan.sh via your sftp manager)
 - ```~# chmod +x autofan.sh``` 
 (change permission for run)
-- ```~# autofan.sh```
+- ```~# autofan.sh``` (run)
 
 Now follow the on-screen instructions step-by-step:
 - setup settings (or leave default)
