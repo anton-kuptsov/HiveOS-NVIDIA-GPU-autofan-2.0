@@ -14,6 +14,7 @@ For navigation use commands : ```pwd``` (current dir), ```cd ..``` (level up), `
 - ```~# chmod +x autofan.sh``` 
 (change permission for run)
 - ```~# autofan.sh```
+
 Now follow the on-screen instructions step-by-step:
 - setup settings (or leave default)
 - run script in GHOST mode (like service) by printing "y"
