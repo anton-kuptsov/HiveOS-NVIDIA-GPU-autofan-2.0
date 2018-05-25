@@ -134,12 +134,16 @@ elif [[ $1 = "-c" ]]; then
 		echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\n"
 		CARDS_NUM=`nvidia-smi -L | wc -l`
 		echo "Found ${CARDS_NUM} GPU(s):"
-		echo -n -e "${green}$(date +"%d/%m/%y %T")${reset}\n"
-		for ((i=0; i<$CARDS_NUM; i++))
-            do
-                GPU_TEMP_C=`nvidia-smi -i $i --query-gpu=temperature.gpu --format=csv,noheader`
-				GPU_FAN_C=`nvidia-smi -i $i --query-gpu=fan.speed --format=csv,noheader`
-				echo "GPU${i} ${GPU_TEMP_C}°C - ${GPU_FAN_C}"
+		while true
+        	do
+			echo -n -e "${green}$(date +"%d/%m/%y %T")${reset}\n"
+			for ((i=0; i<$CARDS_NUM; i++))
+				do
+					GPU_TEMP_C=`nvidia-smi -i $i --query-gpu=temperature.gpu --format=csv,noheader`
+					GPU_FAN_C=`nvidia-smi -i $i --query-gpu=fan.speed --format=csv,noheader`
+					echo "GPU${i} ${GPU_TEMP_C}°C - ${GPU_FAN_C}"
+			done
+		sleep $DELAY 
 		done
 		
 elif [[ $1 = "-k" ]]; then pkill $s_name
