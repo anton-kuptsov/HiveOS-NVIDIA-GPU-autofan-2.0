@@ -1,5 +1,6 @@
 # HiveOS NVIDIA GPU autofan ver.2.0
 Nvidia gpu automatic fan speed script for HiveOS Ubuntu. Work on mixed RIGs with AMD and NVIDIA GPU's
+
 HiveОS: https://goo.gl/qXNH54
 
 # Disclaimer
