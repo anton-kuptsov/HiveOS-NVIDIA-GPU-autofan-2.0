@@ -8,7 +8,7 @@ Use and change at your own risk! Not responsible for any damages or issues, chan
 - Go to ```home/user/``` directory on your HiveOS. 
 For navigation use commands : ```pwd``` (current dir), ```cd ..``` (level up), ```cd dir``` (move to dir)
 - ```~# wget https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh```
-(or dowload and put autofan.sh via your sftp manager)
+(or download and put autofan.sh via your sftp manager)
 - ```~# chmod +x autofan.sh``` 
 (change permission for run)
 - ```~# autofan.sh```
