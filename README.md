@@ -27,11 +27,17 @@ Now follow the on-screen instructions step-by-step:
 
 # Run with keys
 The script has the following startup keys:
-	-s 		- start setup settings (terminate by Ctrl+C)
-	-g 		- running script in GHOST mode or SCREEN mode (terminate by Ctrl+C)
-	-c 		- checking current script status and current GPU temperature/fan speed, updated every DELAY time (terminate by Ctrl+C)
-	-r 		- running script in SCREEN mode (terminate by Ctrl+C)
-	-k 		- kill script
+
+-s 		- start setup settings (terminate by Ctrl+C)
+
+-g 		- running script in GHOST mode or SCREEN mode (terminate by Ctrl+C)
+
+-c 		- checking current script status and current GPU temperature/fan speed, updated every DELAY time (terminate by Ctrl+C)
+
+-r 		- running script in SCREEN mode (terminate by Ctrl+C)
+
+-k 		- kill script
+
   Run without any keys has follow steps: 
   - start setup settings
   - checking starup status
