@@ -34,7 +34,7 @@ Now follow the on-screen instructions step-by-step:
 # Run with keys
 The script has the following startup keys:
 
--s 		- start setup settings (terminate by Ctrl+C)
+-s 		- start setup settings (terminate by Ctrl+C). Don't need restart the script.
 
 -g 		- running script in GHOST mode or SCREEN mode (terminate by Ctrl+C)
 
