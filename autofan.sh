@@ -122,7 +122,7 @@ fi
 }
 
 function selfupdate {
-new_version=`wget -cache=off -q -O- https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/version | head`
+new_version=`wget -q -O- https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/version | head`
 if [[ $new_version != $VERSION ]] 
 		then 
 		echo "${green}NEW VERSION $new_version ${reset}"
@@ -130,7 +130,7 @@ if [[ $new_version != $VERSION ]]
 		if [[ $REPLY = "y" ]]
 				then 
 				mv autofan.sh autofan.sh.old
-				if wget -cache=off -q https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh
+				if wget -q https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh
 				then rm autofan.sh.old
 				echo "${green}[Status]:${reset} The script updated."
 				else 
