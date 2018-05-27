@@ -1,4 +1,4 @@
-# HiveOS NVIDIA GPU autofan ver.2.0
+# HiveOS NVIDIA GPU autofan
 Nvidia gpu automatic fan speed script for HiveOS Ubuntu. Work on mixed RIGs with AMD and NVIDIA GPU's
 
 If you upgrade HiveOS via account on website or by command ```selfupgrade``` not need re-install the script.
@@ -29,6 +29,8 @@ Now follow the on-screen instructions step-by-step:
  - ```MAX_TEMP``` - GPU temperature at which the maximum coefficient is applied
  - ```MIN_COEF``` - minimum coefficient
  - ```MAX_COEF``` - maximum coefficient
+ - ```MINER_STOP``` - stop miner if reaching critical temperature (1-YES/0-NO)
+ - ```CRITICAL_TEMP_MINER_STOP``` - critical temperature
 
 
 # Run with keys
