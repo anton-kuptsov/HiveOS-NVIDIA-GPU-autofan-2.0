@@ -15,7 +15,7 @@ MAX_TEMP=70
 MIN_COEF=80
 MAX_COEF=110
 
-VERSION="2.0"
+VERSION="2.1"
 s_name="autofan.sh"
 export DISPLAY=:0
 
@@ -121,10 +121,33 @@ ghost_run
 fi
 }
 
+function selfupdate {
+new_version=`wget -cache=off -q -O- https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/version | head`
+if [[ $new_version != $VERSION ]] 
+		then 
+		echo "${green}NEW VERSION $new_version ${reset}"
+		read -p  "Continue update? (y/n)"
+		if [[ $REPLY = "y" ]]
+				then 
+				mv autofan.sh autofan.sh.old
+				if wget -cache=off -q https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh
+				then rm autofan.sh.old
+				echo "${green}[Status]:${reset} The script updated."
+				else 
+						echo "${red}[ FAIL ]{reset}"
+						mv autofan.sh.old autofan.sh
+				fi
+		else echo "Your choice is ${red}[NO]${reset}."
+		fi
+else echo "${green}[Status]:${reset}You use actual version $new_version"
+fi
+}
+
 if test -f "/home/user/autofan.conf" ; then source /home/user/autofan.conf ; fi
 
 if [[ $1 = "-r" ]]; then auto_fan
 elif [[ $1 = "-s" ]]; then set_var
+elif [[ $1 = "-u" ]]; then selfupdate
 elif [[ $1 = "-g" ]]; then ghost_run
 elif [[ $1 = "-c" ]]; then
 		if screen -ls | grep -q "autofan"; then
