@@ -44,6 +44,8 @@ The script has the following startup keys:
 
 -k 		- kill script
 
+-u		- selfupdate
+
   Run without any keys has follow steps: 
   - start setup settings
   - checking starup status
