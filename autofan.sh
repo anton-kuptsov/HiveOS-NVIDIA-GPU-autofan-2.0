@@ -39,13 +39,12 @@ if [[ $REPLY > 0 ]]; then MIN_COEF=$REPLY; fi; echo -n -e "${red}MIN_COEF=$MIN_C
 read -p  "Enter MAX_COEF (current $MAX_COEF): "
 if [[ $REPLY > 0 ]]; then MAX_COEF=$REPLY; fi; echo -n -e "${red}MAX_COEF=$MAX_COEF${reset}\n"
 read -p  "Enter MINER_STOP (1-YES/0-NO, current state $MINER_STOP): "
-if [[ $REPLY == 1 ]]
-		then 
-		MINER_STOP=$REPLY
+if [[ $REPLY == 1 ]]; then MINER_STOP=$REPLY
+else MINER_STOP=0; fi; echo -n -e "${red}MINER_STOP=$MINER_STOP${reset}\n"
+if [[ $MINER_STOP == 1 ]]; then 
 		read -p  "Enter CRITICAL_TEMP_MINER_STOP (current $CRITICAL_TEMP_MINER_STOP): "
 		if [[ $REPLY > 0 ]]; then CRITICAL_TEMP_MINER_STOP=$REPLY; fi; echo -n -e "${red}CRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP${reset}\n"
-elif [[ $REPLY == 0 ]]; then MINER_STOP=$REPLY; fi; echo -n -e "${red}MINER_STOP=$MINER_STOP${reset}\n"
-
+fi
 echo "Creating config..."
 if [ ! -f "/home/user/autofan.conf" ]; then
 		touch /home/user/autofan.conf
