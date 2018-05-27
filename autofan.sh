@@ -131,7 +131,9 @@ if [[ $new_version != $VERSION ]]
 				then 
 				mv autofan.sh autofan.sh.old
 				if wget -q https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh
-				then rm autofan.sh.old
+				then 
+				rm autofan.sh.old
+				chmod +x autofan.sh
 				echo "${green}[Status]:${reset} The script updated."
 				else 
 						echo "${red}[ FAIL ]{reset}"
