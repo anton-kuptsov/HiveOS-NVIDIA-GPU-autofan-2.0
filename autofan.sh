@@ -14,8 +14,10 @@ MIN_TEMP=60
 MAX_TEMP=70
 MIN_COEF=80
 MAX_COEF=110
+MINER_STOP=0
+CRITICAL_TEMP_MINER_STOP=90
 
-VERSION="2.1"
+VERSION="2.2"
 s_name="autofan.sh"
 export DISPLAY=:0
 
@@ -24,24 +26,32 @@ green=$(tput setf 2)
 reset=$(tput sgr0)
 
 function set_var {
-read -p  "Enter DELAY (default 30): "
+read -p  "Enter DELAY (current $DELAY): "
 if [[ $REPLY > 0 ]]; then DELAY=$REPLY; fi; echo -n -e "${red}DELAY=$DELAY${reset}\n"
-read -p  "Enter MIN_SPEED (default 20): "
+read -p  "Enter MIN_SPEED (current $MIN_SPEED): "
 if [[ $REPLY > 0 ]]; then MIN_SPEED=$REPLY; fi; echo -n -e "${red}MIN_SPEED=$MIN_SPEED${reset}\n"
-read -p  "Enter MIN TEMP (default 60): "
+read -p  "Enter MIN TEMP (current $MIN_TEMP): "
 if [[ $REPLY > 0 ]]; then MIN_TEMP=$REPLY; fi; echo -n -e "${red}MIN_TEMP=$MIN_TEMP${reset}\n"
-read -p  "Enter MAX TEMP (default 70): "
+read -p  "Enter MAX TEMP (current $MAX_TEMP): "
 if [[ $REPLY > 0 ]]; then MAX_TEMP=$REPLY; fi; echo -n -e "${red}MAX_TEMP=$MAX_TEMP${reset}\n"
-read -p  "Enter MIN_COEF (default 80): "
+read -p  "Enter MIN_COEF (current $MIN_COEF): "
 if [[ $REPLY > 0 ]]; then MIN_COEF=$REPLY; fi; echo -n -e "${red}MIN_COEF=$MIN_COEF${reset}\n"
-read -p  "Enter MAX_COEF (default 110): "
+read -p  "Enter MAX_COEF (current $MAX_COEF): "
 if [[ $REPLY > 0 ]]; then MAX_COEF=$REPLY; fi; echo -n -e "${red}MAX_COEF=$MAX_COEF${reset}\n"
+read -p  "Enter MINER_STOP (1-YES/0-NO, current state $MINER_STOP): "
+if [[ $REPLY == 1 ]]
+		then 
+		MINER_STOP=$REPLY
+		read -p  "Enter CRITICAL_TEMP_MINER_STOP (current $CRITICAL_TEMP_MINER_STOP): "
+		if [[ $REPLY > 0 ]]; then CRITICAL_TEMP_MINER_STOP=$REPLY; fi; echo -n -e "${red}CRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP${reset}\n"
+elif [[ $REPLY == 0 ]]; then MINER_STOP=$REPLY; fi; echo -n -e "${red}MINER_STOP=$MINER_STOP${reset}\n"
+
 echo "Creating config..."
 if [ ! -f "/home/user/autofan.conf" ]; then
 		touch /home/user/autofan.conf
 fi
 echo -n > /home/user/autofan.conf
-echo -e "DELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF" >> /home/user/autofan.conf
+echo -e "DELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP" >> /home/user/autofan.conf
 echo "${green}[Status]: ${reset}Config created."		
 }
 
@@ -66,6 +76,7 @@ CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
 echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\n"
 sleep 2
+
 while true
         do
 			if test -f "/home/user/autofan.conf" ; then source /home/user/autofan.conf ; fi
@@ -80,6 +91,14 @@ while true
 						then
 								FAN_SPEED=$MIN_SPEED 
 						fi
+						if [[ $MINER_STOP == 1 ]]
+							then 
+								if  ! screen -ls | grep -q "miner" 
+									then
+									echo "${green}[Status]: ${reset} Miner starting."
+									miner start
+								fi
+						fi
 
                 elif [[ $GPU_TEMP > $MIN_TEMP ]] && [[ $GPU_TEMP < $MAX_TEMP ]]
                     then
@@ -88,12 +107,20 @@ while true
 				elif [ $GPU_TEMP -ge $MAX_TEMP ]
                     then
 						FAN_SPEED=$(( $GPU_TEMP *(($GPU_TEMP - $MAX_TEMP) * 4 + $MAX_COEF)/100 ))
+						
                 fi
-
-		if [ $FAN_SPEED -gt 100 ]
-				then
-					FAN_SPEED=100
+		if [ $GPU_TEMP -ge $CRITICAL_TEMP_MINER_STOP ]
+			then
+				 if [[ $MINER_STOP == 1 ]]
+							then 
+							miner stop
+							echo "${red}Critical temperature! Miner STOPPED!${reset}"
+				 fi
 		fi
+				if [ $FAN_SPEED -gt 100 ]
+					then
+					FAN_SPEED=100
+				fi
                 nvidia-settings -a [gpu:$i]/GPUFanControlState=1 > /dev/null
 				nvidia-settings -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null
                 echo "GPU${i} ${GPU_TEMP}°C -> ${FAN_SPEED}%"
@@ -119,6 +146,7 @@ else
 echo "${red}[FAIL] ${reset} Please, make a choice."
 ghost_run
 fi
+
 }
 
 function selfupdate {
@@ -144,14 +172,26 @@ if [[ $new_version != $VERSION ]]
 else echo "${green}[Status]:${reset}You use actual version $new_version"
 fi
 }
-
 if test -f "/home/user/autofan.conf" ; then source /home/user/autofan.conf ; fi
-
-if [[ $1 = "-r" ]]; then auto_fan
-elif [[ $1 = "-s" ]]; then set_var
-elif [[ $1 = "-u" ]]; then selfupdate
-elif [[ $1 = "-g" ]]; then ghost_run
-elif [[ $1 = "-c" ]]; then
+case $1 in
+	-r)
+		auto_fan
+	;;
+	
+	-s)
+		set_var
+	;;
+	
+	-g)
+		ghost_run
+	;;
+	
+	-u)
+		selfupdate
+		echo "${green}[Status]:${reset} Restart script!"
+	;;
+	
+	-c)
 		if screen -ls | grep -q "autofan"; then
 		echo "${green}[Status]:${reset} The script is running."
 		else echo "${green}[Status]:${reset} The script is ${red}NOT${reset} running."
@@ -159,8 +199,9 @@ elif [[ $1 = "-c" ]]; then
 		echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\n"
 		CARDS_NUM=`nvidia-smi -L | wc -l`
 		echo "Found ${CARDS_NUM} GPU(s):"
+		
 		while true
-        	do
+        do
 			echo -n -e "${green}$(date +"%d/%m/%y %T")${reset}\n"
 			for ((i=0; i<$CARDS_NUM; i++))
 				do
@@ -170,12 +211,16 @@ elif [[ $1 = "-c" ]]; then
 			done
 		sleep $DELAY 
 		done
-		
-elif [[ $1 = "-k" ]]; then pkill $s_name
-else 
-		echo -n -e "${green}HiveOS autofan script for NVIDIA GPU.${reset} v.${VERSION}\n"
+	;;
+	-k)
+		pkill $s_name
+	;;
+	
+	*)
+	echo -n -e "${green}HiveOS autofan script for NVIDIA GPU.${reset} v.${VERSION}\n"
 		set_var
 		check_run
 		ghost_run
-fi
+	;;
+esac
 exit
