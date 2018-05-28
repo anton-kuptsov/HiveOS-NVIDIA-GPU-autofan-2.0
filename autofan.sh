@@ -91,8 +91,8 @@ gpu_info=`nvidia-smi --query-gpu=power.min_limit,power.limit --format=csv,nohead
 pl_min=`awk -F', ' '{print $1}' <<< $gpu_info`
 pl_cur=`awk -F', ' '{print $2}' <<< $gpu_info`
 echo "${green}GPU${i}${reset} Minimal possible PL: $pl_min, curent PL: $pl_cur"
-new_pl=$(( `sed 's/\.[0-9]*//' <<< $pl_min`*120/100 ))
-if [  $new_pl -lt `sed 's/\.[0-9]*//' <<< $pl_cur` ]
+new_pl=$(( `sed 's/\.[0-9]*//' <<< $pl_cur`-5 ))
+if [  `sed 's/\.[0-9]*//' <<< $pl_min` -lt $new_pl  ]
 	then
 		echo "${green}GPU${i}-> ${reset}setting PL to $new_pl"
 		nvidia-smi -i $i -pl $new_pl > /dev/null
