@@ -20,6 +20,7 @@ CRITICAL_TEMP_MINER_STOP=90
 VERSION="2.2"
 s_name="autofan.sh"
 export DISPLAY=:0
+FLAG_MINER_START_STOP=0
 
 red=$(tput setf 4)
 green=$(tput setf 2)
@@ -70,6 +71,13 @@ else
 fi
 }
 
+function safe_mode {
+if [[ $FLAG_MINER_START_STOP == 1 ]]; then miner start; echo "${green}[Status]: ${reset} Miner starting." 
+elif [[ $FLAG_MINER_START_STOP == 2 ]]; then miner stop; echo "${red}Critical temperature! Miner STOPPED!${reset}"
+fi
+FLAG_MINER_START_STOP=0
+}
+
 function auto_fan {
 CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
@@ -94,8 +102,7 @@ while true
 							then 
 								if  ! screen -ls | grep -q "miner" 
 									then
-									echo "${green}[Status]: ${reset} Miner starting."
-									miner start
+									FLAG_MINER_START_STOP=1
 								fi
 						fi
 
@@ -112,8 +119,7 @@ while true
 			then
 				 if [[ $MINER_STOP == 1 ]]
 							then 
-							miner stop
-							echo "${red}Critical temperature! Miner STOPPED!${reset}"
+							FLAG_MINER_START_STOP=2
 				 fi
 		fi
 				if [ $FAN_SPEED -gt 100 ]
@@ -124,6 +130,7 @@ while true
 				nvidia-settings -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null
                 echo "GPU${i} ${GPU_TEMP}°C -> ${FAN_SPEED}%"
        done
+safe_mode
 sleep $DELAY
 done
 }
