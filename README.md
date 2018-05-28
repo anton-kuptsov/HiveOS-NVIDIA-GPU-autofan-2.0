@@ -29,8 +29,10 @@ Now follow the on-screen instructions step-by-step:
  - ```MAX_TEMP``` - GPU temperature at which the maximum coefficient is applied
  - ```MIN_COEF``` - minimum coefficient
  - ```MAX_COEF``` - maximum coefficient
- - ```MINER_STOP``` - stop miner if reaching critical temperature (1-YES/0-NO)
+ - ```MINER_STOP``` - stop miner if reaching critical temperature
  - ```CRITICAL_TEMP_MINER_STOP``` - critical temperature
+ - ```PL_LIMIT``` - set lower power limit if reaching critical temperature
+ - ```CRITICAL_TEMP_PL``` - critical temperature
 
 
 # Run with keys
