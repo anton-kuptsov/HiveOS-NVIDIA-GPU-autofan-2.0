@@ -20,7 +20,7 @@ For navigation use commands : ```cd ~``` (go to home dir),  ```cd ..``` (level u
 
 Now follow the on-screen instructions step-by-step:
 - setup settings (or leave default)
-- run script in GHOST mode (like service) by printing "y"
+- run script in GHOST mode (like service)
 
 # Settings
  - ```DELAY``` - time delay for fan control (in seconds)
