@@ -31,7 +31,7 @@ Now follow the on-screen instructions step-by-step:
  - ```MAX_COEF``` - maximum coefficient
  - ```MINER_STOP``` - stop miner if reaching critical temperature
  - ```CRITICAL_TEMP_MINER_STOP``` - critical temperature
- - ```PL_LIMIT``` - set lower power limit if reaching critical temperature (120% from the minimum possible GPU PL)
+ - ```PL_LIMIT``` - set lower power limit if reaching critical temperature (-5 watt every time)
  - ```CRITICAL_TEMP_PL``` - critical temperature
 
 
