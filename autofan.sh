@@ -19,7 +19,7 @@ CRITICAL_TEMP_MINER_STOP=90
 PL_LIMIT=1
 CRITICAL_TEMP_PL=75
 
-VERSION="2.2"
+VERSION="2.2.1"
 s_name="autofan.sh"
 export DISPLAY=:0
 FLAG_MINER_START_STOP=0
@@ -80,10 +80,9 @@ fi
 }
 
 function safe_mode {
-if [[ $FLAG_MINER_START_STOP == 1 ]]; then miner start; echo "${green}[Status]: ${reset} Miner starting." 
-elif [[ $FLAG_MINER_START_STOP == 2 ]]; then miner stop; echo "${red}Critical temperature! Miner STOPPED!${reset}"
+if [[ $1 == 1 ]]; then miner start; echo "${green}[Status]: ${reset} Miner starting." 
+elif [[ $1 == 2 ]]; then miner stop; echo "${red}Critical temperature! Miner STOPPED!${reset}"
 fi
-FLAG_MINER_START_STOP=0
 }
 
 function clock_limit_mode {
@@ -101,10 +100,12 @@ fi
 }
 
 function auto_fan {
+
 CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
 echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL\n"
 sleep 2
+
 while true
         do
 	if test -f "/home/user/autofan.conf" ; then source /home/user/autofan.conf ; fi
@@ -112,10 +113,10 @@ while true
         for ((i=0; i<$CARDS_NUM; i++))
             do
                 GPU_TEMP=`nvidia-smi -i $i --query-gpu=temperature.gpu --format=csv,noheader`
-                if [ $GPU_TEMP -le $MIN_TEMP ]
+                if [[ $GPU_TEMP -le $MIN_TEMP ]]
                     then
                         FAN_SPEED=$(($GPU_TEMP * ($MIN_COEF-($MIN_TEMP - $GPU_TEMP) * 2)/100))
-						if [ $FAN_SPEED -le $MIN_SPEED ] 
+						if [[ $FAN_SPEED -le $MIN_SPEED ]] 
 						then
 								FAN_SPEED=$MIN_SPEED 
 						fi
@@ -123,42 +124,35 @@ while true
 							then 
 								if  ! screen -ls | grep -q "miner" 
 									then
-									FLAG_MINER_START_STOP=1
+									safe_mode 1
 								fi
 						fi
 
-                elif [[ $GPU_TEMP > $MIN_TEMP ]] && [[ $GPU_TEMP < $MAX_TEMP ]]
+                elif [[ $GPU_TEMP > $MIN_TEMP  &&  $GPU_TEMP < $MAX_TEMP ]]
                     then
 						FAN_SPEED=$((  $GPU_TEMP *(($GPU_TEMP - $MIN_TEMP) * 4 + $MIN_COEF)/100 ))
 
-				elif [ $GPU_TEMP -ge $MAX_TEMP ]
+				elif [[ $GPU_TEMP -ge $MAX_TEMP ]]
                     then
 						FAN_SPEED=$(( $GPU_TEMP *(($GPU_TEMP - $MAX_TEMP) * 4 + $MAX_COEF)/100 ))
 						
                 fi
-				if [ $GPU_TEMP -ge $CRITICAL_TEMP_MINER_STOP ]
+				if [[ $GPU_TEMP -ge $CRITICAL_TEMP_MINER_STOP  &&  $MINER_STOP == 1 ]]
 					then
-						 if [[ $MINER_STOP == 1 ]]
-									then 
-									FLAG_MINER_START_STOP=2
-						 fi
+					safe_mode 2
 				fi
-				if [ $GPU_TEMP -ge $CRITICAL_TEMP_PL ]
+				if [[ $GPU_TEMP -ge $CRITICAL_TEMP_PL  &&  $PL_LIMIT == 1 ]]
 					then
-						 if [[ $PL_LIMIT == 1 ]]
-									then 
-									clock_limit_mode $i
-						 fi
+					clock_limit_mode $i
 				fi
-				if [ $FAN_SPEED -gt 100 ]
+				if [[ $FAN_SPEED -gt 100 ]]
 					then
 					FAN_SPEED=100
 				fi
                 nvidia-settings -a [gpu:$i]/GPUFanControlState=1 > /dev/null
-				nvidia-settings -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null
+		nvidia-settings -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null
                 echo "GPU${i} ${GPU_TEMP}°C -> ${FAN_SPEED}%"
        done
-safe_mode
 sleep $DELAY
 done
 }
