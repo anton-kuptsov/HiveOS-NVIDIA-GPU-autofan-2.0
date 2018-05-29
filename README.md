@@ -10,14 +10,14 @@ HiveОS: https://goo.gl/qXNH54
 Use and change at your own risk! Not responsible for any damages or issues, changing temperature controls, fan speed, etc. might damage your computer hardwares.
 
 # Install
- Go to ```/home/user``` directory on your HiveOS ( ```cd /home/user```). Check current dir by command ```pwd```.
+- Go to ```/home/user``` directory on your HiveOS ( ```cd /home/user```). Check current dir by command ```pwd```.
 For navigation use commands : ```cd ~``` (go to home dir),  ```cd ..``` (level up), ```cd dir``` (move to dir)
-> ```~# wget https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh```
+- ```~# wget https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh```
 (or download and put autofan.sh via your sftp manager)
 
-> ```~# chmod +x autofan.sh``` (change permission for run)
+- ```~# chmod +x autofan.sh``` (change permission for run)
 
-> ```~# autofan.sh``` (run)
+- ```~# autofan.sh``` (run)
 
 
 Now follow the on-screen instructions step-by-step:
