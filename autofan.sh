@@ -28,36 +28,44 @@ reset=$(tput sgr0)
 
 function set_var {
 read -p  "Enter DELAY (current $DELAY): "
-if [[ $REPLY > 0 ]]; then DELAY=$REPLY; fi; echo -n -e "${red}DELAY=$DELAY${reset}\n"
+[[ $REPLY > 0 ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && DELAY=$REPLY
+echo -n -e "${red}DELAY=$DELAY${reset}\n"
 read -p  "Enter MIN_SPEED (current $MIN_SPEED): "
-if [[ $REPLY > 0 ]]; then MIN_SPEED=$REPLY; fi; echo -n -e "${red}MIN_SPEED=$MIN_SPEED${reset}\n"
+[[ -n $REPLY ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && MIN_SPEED=$REPLY
+echo -n -e "${red}MIN_SPEED=$MIN_SPEED${reset}\n"
 read -p  "Enter MIN TEMP (current $MIN_TEMP): "
-if [[ $REPLY > 0 ]]; then MIN_TEMP=$REPLY; fi; echo -n -e "${red}MIN_TEMP=$MIN_TEMP${reset}\n"
+[[ -n $REPLY ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && MIN_TEMP=$REPLY
+echo -n -e "${red}MIN_TEMP=$MIN_TEMP${reset}\n"
 read -p  "Enter MAX TEMP (current $MAX_TEMP): "
-if [[ $REPLY > 0 ]]; then MAX_TEMP=$REPLY; fi; echo -n -e "${red}MAX_TEMP=$MAX_TEMP${reset}\n"
+[[ -n $REPLY ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && MAX_TEMP=$REPLY
+echo -n -e "${red}MAX_TEMP=$MAX_TEMP${reset}\n"
 read -p  "Enter MIN_COEF (current $MIN_COEF): "
-if [[ $REPLY > 0 ]]; then MIN_COEF=$REPLY; fi; echo -n -e "${red}MIN_COEF=$MIN_COEF${reset}\n"
+[[ -n $REPLY ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && MIN_COEF=$REPLY
+echo -n -e "${red}MIN_COEF=$MIN_COEF${reset}\n"
 read -p  "Enter MAX_COEF (current $MAX_COEF): "
-if [[ $REPLY > 0 ]]; then MAX_COEF=$REPLY; fi; echo -n -e "${red}MAX_COEF=$MAX_COEF${reset}\n"
+[[ -n $REPLY ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && MAX_COEF=$REPLY
+echo -n -e "${red}MAX_COEF=$MAX_COEF${reset}\n"
 read -p  "Switch on MINER_STOP (1-YES/0-NO, current state $MINER_STOP): "
 if [[ $REPLY == 1 ]]; then MINER_STOP=$REPLY
 else MINER_STOP=0; fi; echo -n -e "${red}MINER_STOP=$MINER_STOP${reset}\n"
 if [[ $MINER_STOP == 1 ]]; then 
 		read -p  "Enter CRITICAL_TEMP_MINER_STOP (current $CRITICAL_TEMP_MINER_STOP): "
-		if [[ $REPLY > 0 ]]; then CRITICAL_TEMP_MINER_STOP=$REPLY; fi; echo -n -e "${red}CRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP${reset}\n"
+		[[ -n $REPLY ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && CRITICAL_TEMP_MINER_STOP=$REPLY
+		echo -n -e "${red}CRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP${reset}\n"
 fi
 read -p  "Switch on PL_LIMIT (1-YES/0-NO, current state $PL_LIMIT): "
 if [[ $REPLY == 1 ]]; then PL_LIMIT=$REPLY
 else PL_LIMIT=0; fi; echo -n -e "${red}PL_LIMIT=$PL_LIMIT${reset}\n"
 if [[ $PL_LIMIT == 1 ]]; then 
 		read -p  "Enter CRITICAL_TEMP_PL (current $CRITICAL_TEMP_PL): "
-		if [[ $REPLY > 0 ]]; then CRITICAL_TEMP_PL=$REPLY; fi; echo -n -e "${red}CRITICAL_TEMP_PL=$CRITICAL_TEMP_PL${reset}\n"
+		[[ -n $REPLY ]] && [ ! -z "${REPLY##*[!0-9]*}" ] && CRITICAL_TEMP_PL=$REPLY
+		echo -n -e "${red}CRITICAL_TEMP_PL=$CRITICAL_TEMP_PL${reset}\n"
 fi
 echo "Creating config..."
-if [ ! -f "/home/user/autofan.conf" ]; then
-		touch /home/user/autofan.conf
+if [ ! -f $CONF_FILE ]; then
+		touch $CONF_FILE
 fi
-echo -n > /home/user/autofan.conf
+echo -n > $CONF_FILE
 echo -e "DELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL" >> /home/user/autofan.conf
 echo "${green}[Status]: ${reset}Config created."		
 }
@@ -148,8 +156,7 @@ while true
 					then
 					FAN_SPEED=100
 				fi
-                nvidia-settings -a [gpu:$i]/GPUFanControlState=1 > /dev/null
-		nvidia-settings -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null
+		nvidia-settings -a [gpu:$i]/GPUFanControlState=1 -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null
                 echo "GPU${i} ${GPU_TEMP}°C -> ${FAN_SPEED}%"
        done
 sleep $DELAY
