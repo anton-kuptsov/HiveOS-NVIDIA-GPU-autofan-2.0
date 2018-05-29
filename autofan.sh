@@ -188,6 +188,7 @@ fi
 }
 
 function selfupdate {
+echo "${green}[Status]:${reset} Checking..."
 new_version=`wget -q -O- https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/version | head`
 if [[ $new_version != $VERSION ]] 
 		then 
