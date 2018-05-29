@@ -201,6 +201,7 @@ if [[ $new_version != $VERSION ]]
 				rm autofan.sh.old
 				chmod +x autofan.sh
 				echo "${green}[Status]:${reset} The script updated."
+				echo "${green}[Status]:${reset} Restart script! (autofan.sh -k and autofan.sh -g)"
 				else 
 						echo "${red}[ FAIL ]{reset}"
 						mv autofan.sh.old autofan.sh
@@ -228,7 +229,7 @@ case $1 in
 	
 	-u)
 		selfupdate
-		echo "${green}[Status]:${reset} Restart script!"
+
 	;;
 	
 	-c)
