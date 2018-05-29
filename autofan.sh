@@ -159,10 +159,15 @@ done
 function ghost_run {
 read -p  "Run script in GHOST mode? (y/n) "
 if [[ $REPLY = "y" ]] ;then 
+					session_count=`screen -ls autofan | grep autofan | wc -l`
+						if [[ $session_count > 0 ]]; then
+							echo -e "${red}AUTOFAN is already running${reset}"
+							echo -e "Run autofan.sh -c to see the current status"
+						else 
+						echo "Your choice is ${green}[YES]${reset}."
+						screen -dmS autofan /home/user/$s_name -r && echo -n -e "${green}[Status]: ${reset}Script started in GHOST mode.\n"
+						fi
 			
-			screen -dmS autofan /home/user/$s_name -r
-			echo "Your choice is ${green}[YES]${reset}."
-			echo -n -e "${green}[Status]: ${reset}Script started in GHOST mode.\n"
 elif [[ $REPLY = "n" ]] ; then
 							echo "Your choice is ${red}[NO]${reset}."
 							read -p  "Run script in default mode? (y/n) "
@@ -173,7 +178,6 @@ else
 echo "${red}[FAIL] ${reset} Please, make a choice."
 ghost_run
 fi
-
 }
 
 function selfupdate {
