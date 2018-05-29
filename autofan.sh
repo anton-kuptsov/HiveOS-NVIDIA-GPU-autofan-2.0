@@ -22,7 +22,6 @@ CRITICAL_TEMP_PL=75
 VERSION="2.2.1"
 s_name="autofan.sh"
 export DISPLAY=:0
-FLAG_MINER_START_STOP=0
 red=$(tput setf 4)
 green=$(tput setf 2)
 reset=$(tput sgr0)
