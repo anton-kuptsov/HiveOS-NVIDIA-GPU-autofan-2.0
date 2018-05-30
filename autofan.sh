@@ -131,8 +131,8 @@ while true
 										done
 						[[ $MINER_STOP == 1 ]] && ! screen -ls | grep -q "miner" && safe_mode 1
 						MINER_STOP=1
-				fi
-                elif [[ $GPU_TEMP > $MIN_TEMP ]] && [[ $GPU_TEMP < $MAX_TEMP ]]
+				
+                elif [[ $GPU_TEMP > $MIN_TEMP  &&  $GPU_TEMP < $MAX_TEMP ]]
                     then
 						FAN_SPEED=$((  $GPU_TEMP *(($GPU_TEMP - $MIN_TEMP) * 4 + $MIN_COEF)/100 ))
 
