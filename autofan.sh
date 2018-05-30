@@ -2,13 +2,12 @@
 
 ##############################################################
 ## Thank you very much for your support! It's very impotant!##
-##														    ##
+##							    ##
 ## Nicehash donate: 3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph	    ##
-## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T		    ##
+## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T	    ##
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
-#VAR
 DELAY=30
 MIN_SPEED=20
 MIN_TEMP=60
@@ -20,29 +19,14 @@ CRITICAL_TEMP_MINER_STOP=90
 PL_LIMIT=1
 CRITICAL_TEMP_PL=75
 
-
-#END VAR
-
-#-----TO DO------
-# +сделать автоапгрейд. на гит сделать файл с номером версии. чекает версию, и пищет, обновлять или нет и какая версия. +
-# +снижать потребление ПЛ (снижать разгон!) при достижении MAX_TEMP +
-# -увеличивать коэффициент MIN_COEF при достижении MAX_TEMP. для этого чекаем, достигла ли температура верхнего/нижнего предела, если да, то 
-# увеличиваем/снижаем коэфициенты (все) на 1 (или 2?). как проверить: в функции установки вентиляторов, ставим флаг переменной один. 
-# пишем доп функцию, которая чекает флаг и увеличивает, с записью новых значений в конфиг.
-# +сделать отключение майнера при большой температуре (опционально) +
-#_____________________
-
-#-----------------
-VERSION="2.2.1"
+VERSION="2.2.2"
 s_name="autofan.sh"
 CONF_FILE="/home/user/autofan.conf"
 export DISPLAY=:0
 red=$(tput setf 4)
 green=$(tput setf 2)
 reset=$(tput sgr0)
-#--------------------
 
-#--------------USER VAR----------
 function set_var {
 read -p  "Enter DELAY (current $DELAY): "
 [ ! -z "${REPLY##*[!0-9]*}" ] && DELAY=$REPLY
@@ -70,7 +54,6 @@ if [[ $MINER_STOP == 1 ]]; then
 		[ ! -z "${REPLY##*[!0-9]*}" ] && CRITICAL_TEMP_MINER_STOP=$REPLY
 		echo -n -e "${red}CRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP${reset}\n"
 fi
-#---PL---
 read -p  "Switch on PL_LIMIT (1-YES/0-NO, current state $PL_LIMIT): "
 [ ! -z "${REPLY##*[!0-9]*}" ] && [[ $REPLY < 2 ]] && PL_LIMIT=$REPLY
 echo -n -e "${red}PL_LIMIT=$PL_LIMIT${reset}\n"
@@ -79,7 +62,6 @@ if [[ $PL_LIMIT == 1 ]]; then
 		[ ! -z "${REPLY##*[!0-9]*}" ] && CRITICAL_TEMP_PL=$REPLY
 		echo -n -e "${red}CRITICAL_TEMP_PL=$CRITICAL_TEMP_PL${reset}\n"
 fi
-#---
 echo "Creating config..."
 if [ ! -f $CONF_FILE ]; then
 		touch $CONF_FILE
@@ -88,11 +70,8 @@ echo -n > $CONF_FILE
 echo -e "DELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL" >> /home/user/autofan.conf
 echo "${green}[Status]: ${reset}Config created."		
 }
-#---------------END USER VAR--------------
 
-#------------Check xinit.user.sh----------------
 function check_run {
-
 if [ ! -f "/home/user/xinit.user.sh" ]; then
 		touch /home/user/xinit.user.sh
 		chmod +x /home/user/xinit.user.sh
@@ -107,7 +86,6 @@ else
 		fi
 fi
 }
-#--------------END CHECK-------------
 
 function safe_mode {
 if [[ $1 == 1 ]]; then miner start; echo "${green}[Status]: ${reset} Miner started." 
@@ -116,33 +94,28 @@ fi
 }
 
 function clock_limit_mode {
-
 gpu_info=`nvidia-smi --query-gpu=power.min_limit,power.limit --format=csv,noheader,nounits -i $i`
 pl_min=`awk -F', ' '{print $1}' <<< $gpu_info`
 pl_cur=`awk -F', ' '{print $2}' <<< $gpu_info`
 echo "${green}GPU${i}${reset} Minimal possible PL: $pl_min, curent PL: $pl_cur"
 new_pl=$(( `sed 's/\.[0-9]*//' <<< $pl_cur`-5 ))
-#cur_pl=`sed 's/\.[0-9]*//' <<< $pl_cur`
 if [  `sed 's/\.[0-9]*//' <<< $pl_min` -lt $new_pl  ]
 	then
 		echo "${green}GPU${i}-> ${reset}setting PL to $new_pl"
 		nvidia-smi -i $i -pl $new_pl > /dev/null
 	else echo "${red}GPU${i}: ${reset}already done or PL too low."
 fi
-
 }
 
 function auto_fan {
-
 CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
 echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL\n"
 sleep 2
-
 while true
         do
-			[[ -e $CONF_FILE ]] && . $CONF_FILE
-            echo -n -e "${green}$(date +"%d/%m/%y %T")${reset}\n"
+	[[ -e $CONF_FILE ]] && . $CONF_FILE
+        echo -n -e "${green}$(date +"%d/%m/%y %T")${reset}\n"
         for ((i=0; i<$CARDS_NUM; i++))
             do
                 GPU_TEMP=`nvidia-smi -i $i --query-gpu=temperature.gpu --format=csv,noheader`
@@ -158,7 +131,6 @@ while true
 										done
 						[[ $MINER_STOP == 1 ]] && ! screen -ls | grep -q "miner" && safe_mode 1
 						MINER_STOP=1
-						# посмотреть температуру всех карт(!), и если все температуры ниже предела, запускаем
 				fi
                 elif [[ $GPU_TEMP > $MIN_TEMP  &&  $GPU_TEMP < $MAX_TEMP ]]
                     then
@@ -202,7 +174,6 @@ ghost_run
 fi
 }
 
-#----v.2.1
 function selfupdate {
 echo "${green}[Status]:${reset} Checking..."
 new_version=`wget -q -O- https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/version | head`
@@ -228,9 +199,7 @@ if [[ $new_version != $VERSION ]]
 else echo "${green}[Status]:${reset}You use actual version $new_version"
 fi
 }
-
 [[ -e $CONF_FILE ]] && . $CONF_FILE 
-
 case $1 in
 	-r)
 		auto_fan
@@ -280,5 +249,4 @@ case $1 in
 		ghost_run
 	;;
 esac
-
 exit
