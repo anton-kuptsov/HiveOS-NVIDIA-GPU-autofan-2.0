@@ -61,8 +61,8 @@ The script has the following startup keys:
 	**Example : ```~# autofan.sh -c```**
 	
 # Startup at boot
-The script create file ```xinit.user.sh``` (or check availability) and configure to run ```autofan.sh``` at startup.
-Also script create ```autofan.conf``` file to store user settings.
+*The script create file ```xinit.user.sh``` (or check availability) and configure to run ```autofan.sh``` at startup.
+Also script create ```autofan.conf``` file to store user settings.*
 
 # Examples of temperature and fan speed (default script settings)
 - 55 C : 38 %
@@ -75,10 +75,10 @@ Also script create ```autofan.conf``` file to store user settings.
 
 # Donate
 
-Nicehash: **```3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph```**
+*Nicehash:* **```3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph```**
 
-Zec: **```t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T```**
+*Zec:* **```t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T```**
 
-ETH: **```0xe835a7d5605a370e4750279b28f9ce0926061ea2```**
+*ETH:* **```0xe835a7d5605a370e4750279b28f9ce0926061ea2```**
 
 	
