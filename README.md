@@ -5,20 +5,20 @@ Nvidia gpu automatic fan speed script for HiveOS Ubuntu. Work on mixed RIGs with
 
 >If you re-install HiveOS on disk - re-install ```autofan.sh``` too(!).
 
-[HiveОS](https://goo.gl/qXNH54)
+[**About HiveОS**](https://goo.gl/qXNH54)
 
 # Disclaimer
 Use and change at your own risk! Not responsible for any damages or issues, changing temperature controls, fan speed, etc. might damage your computer hardwares.
 
 # Install
-- Go to ```/home/user``` directory on your HiveOS ( ```cd /home/user```). Check current dir by command ```pwd```.
-For navigation use commands : ```cd ~``` (go to home dir),  ```cd ..``` (level up), ```cd dir``` (move to dir)
-- ```~# wget https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh```
-(or download and put autofan.sh via your sftp manager)
+1. **```cd /home/user```** (go to ```/home/user``` directory on your HiveOS).
+>Check current dir by command ```pwd```. For navigation use commands : ```cd ~``` (go to home dir),  ```cd ..``` (level up), ```cd dir``` (move to dir)
+2. **```~# wget https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh```** (download the script)
+>Or download and put autofan.sh via your sftp manager
 
-- ```~# chmod +x autofan.sh``` (change permission for run)
+3.**```~# chmod +x autofan.sh```** (change permission to 755 for run)
 
-- ```~# autofan.sh``` (run)
+4.**```~# autofan.sh```** (run the script)
 
 
 Now follow the on-screen instructions step-by-step:
@@ -41,24 +41,24 @@ Now follow the on-screen instructions step-by-step:
 # Run with keys
 The script has the following startup keys:
 
--s 		- start setup settings (terminate by Ctrl+C). Don't need restart the script.
+**-s** 		- start setup settings (terminate by Ctrl+C). Don't need restart the script.
 
--g 		- running script in GHOST mode or SCREEN mode (terminate by Ctrl+C)
+**-g** 		- running script in GHOST mode or SCREEN mode (terminate by Ctrl+C)
 
--c 		- checking current script status and current GPU temperature/fan speed, updated every DELAY time (terminate by Ctrl+C)
+**-c** 		- checking current script status and current GPU temperature/fan speed, updated every DELAY time (terminate by Ctrl+C)
 
--r 		- running script in SCREEN mode (terminate by Ctrl+C)
+**-r** 		- running script in SCREEN mode (terminate by Ctrl+C)
 
--k 		- kill script
+**-k** 		- kill script
 
--u		- selfupdate
+**-u**		- selfupdate
 
   Run without any keys has follow steps: 
   - start setup settings
   - checking starup status
   - running script in GHOST mode or SCREEN mode
 	
-	Example : ```~# autofan.sh -c```
+	**Example : ```~# autofan.sh -c```**
 	
 # Startup at boot
 The script create file ```xinit.user.sh``` (or check availability) and configure to run ```autofan.sh``` at startup.
@@ -75,10 +75,10 @@ Also script create ```autofan.conf``` file to store user settings.
 
 # Donate
 
-Nicehash: ```3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph```
+Nicehash: **```3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph```**
 
-Zec: ```t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T```
+Zec: **```t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T```**
 
-ETH: ```0xe835a7d5605a370e4750279b28f9ce0926061ea2```
+ETH: **```0xe835a7d5605a370e4750279b28f9ce0926061ea2```**
 
 	
