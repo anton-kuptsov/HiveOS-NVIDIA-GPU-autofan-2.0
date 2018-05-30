@@ -1,3 +1,6 @@
+# v.2.2.2   2018-05-30
+- bug fix and some code optimization
+
 # v.2.2.1   2018-05-29
 - check for running one copy in GHOST mode
 
