@@ -13,12 +13,12 @@ Use and change at your own risk! Not responsible for any damages or issues, chan
 # Install
 1. **```cd /home/user```** (go to ```/home/user``` directory on your HiveOS).
 >Check current dir by command ```pwd```. For navigation use commands : ```cd ~``` (go to home dir),  ```cd ..``` (level up), ```cd dir``` (move to dir)
-2. **```~# wget https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh```** (download the script)
+2. **```wget https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/autofan.sh```** (download the script)
 >Or download and put autofan.sh via your sftp manager
 
-3.**```~# chmod +x autofan.sh```** (change permission to 755 for run)
+3.**```chmod +x autofan.sh```** (change permission to 755 for run)
 
-4.**```~# autofan.sh```** (run the script)
+4.**```autofan.sh```** (run the script)
 
 
 Now follow the on-screen instructions step-by-step:
