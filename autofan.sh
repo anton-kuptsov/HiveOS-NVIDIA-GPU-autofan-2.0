@@ -2,20 +2,20 @@
 
 ##############################################################
 ## Thank you very much for your support! It's very impotant!##
-##							    ##
+##														    ##
 ## Nicehash donate: 3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph	    ##
-## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T	    ##
+## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T		    ##
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
 DELAY=30
 MIN_SPEED=20
-MIN_TEMP=55
+MIN_TEMP=60
 MAX_TEMP=70
-MIN_COEF=85
+MIN_COEF=80
 MAX_COEF=110
-MINER_STOP=1
-CRITICAL_TEMP_MINER_STOP=85
+MINER_STOP=0
+CRITICAL_TEMP_MINER_STOP=90
 PL_LIMIT=1
 CRITICAL_TEMP_PL=75
 
@@ -63,9 +63,7 @@ if [[ $PL_LIMIT == 1 ]]; then
 		echo -n -e "${red}CRITICAL_TEMP_PL=$CRITICAL_TEMP_PL${reset}\n"
 fi
 echo "Creating config..."
-if [ ! -f $CONF_FILE ]; then
-		touch $CONF_FILE
-fi
+[ ! -f $CONF_FILE ] &&	touch $CONF_FILE
 echo -n > $CONF_FILE
 echo -e "DELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL" >> /home/user/autofan.conf
 echo "${green}[Status]: ${reset}Config created."		
@@ -85,7 +83,6 @@ else
 					echo -n -e "${green}[Status]: ${reset}Autorun created.\n"
 		fi
 fi
-}
 
 function safe_mode {
 if [[ $1 == 1 ]]; then miner start; echo "${green}[Status]: ${reset} Miner started." 
@@ -99,12 +96,14 @@ pl_min=`awk -F', ' '{print $1}' <<< $gpu_info`
 pl_cur=`awk -F', ' '{print $2}' <<< $gpu_info`
 echo "${green}GPU${i}${reset} Minimal possible PL: $pl_min, curent PL: $pl_cur"
 new_pl=$(( `sed 's/\.[0-9]*//' <<< $pl_cur`-5 ))
+#cur_pl=`sed 's/\.[0-9]*//' <<< $pl_cur`
 if [  `sed 's/\.[0-9]*//' <<< $pl_min` -lt $new_pl  ]
 	then
 		echo "${green}GPU${i}-> ${reset}setting PL to $new_pl"
 		nvidia-smi -i $i -pl $new_pl > /dev/null
 	else echo "${red}GPU${i}: ${reset}already done or PL too low."
 fi
+
 }
 
 function auto_fan {
@@ -114,8 +113,8 @@ echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$
 sleep 2
 while true
         do
-	[[ -e $CONF_FILE ]] && . $CONF_FILE
-        echo -n -e "${green}$(date +"%d/%m/%y %T")${reset}\n"
+			[[ -e $CONF_FILE ]] && . $CONF_FILE
+            echo -n -e "${green}$(date +"%d/%m/%y %T")${reset}\n"
         for ((i=0; i<$CARDS_NUM; i++))
             do
                 GPU_TEMP=`nvidia-smi -i $i --query-gpu=temperature.gpu --format=csv,noheader`
@@ -131,8 +130,7 @@ while true
 										done
 						[[ $MINER_STOP == 1 ]] && ! screen -ls | grep -q "miner" && safe_mode 1
 						MINER_STOP=1
-				
-                elif [[ $GPU_TEMP > $MIN_TEMP  &&  $GPU_TEMP < $MAX_TEMP ]]
+                elif [[ $GPU_TEMP > $MIN_TEMP ]]  && [[ $GPU_TEMP < $MAX_TEMP ]]
                     then
 						FAN_SPEED=$((  $GPU_TEMP *(($GPU_TEMP - $MIN_TEMP) * 4 + $MIN_COEF)/100 ))
 
