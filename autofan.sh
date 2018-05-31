@@ -2,20 +2,20 @@
 
 ##############################################################
 ## Thank you very much for your support! It's very impotant!##
-##														    ##
+##							    ##
 ## Nicehash donate: 3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph	    ##
-## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T		    ##
+## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T	    ##
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
 DELAY=30
 MIN_SPEED=20
-MIN_TEMP=60
+MIN_TEMP=55
 MAX_TEMP=70
-MIN_COEF=80
+MIN_COEF=85
 MAX_COEF=110
-MINER_STOP=0
-CRITICAL_TEMP_MINER_STOP=90
+MINER_STOP=1
+CRITICAL_TEMP_MINER_STOP=85
 PL_LIMIT=1
 CRITICAL_TEMP_PL=75
 
