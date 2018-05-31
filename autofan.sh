@@ -10,12 +10,12 @@
 
 DELAY=30
 MIN_SPEED=20
-MIN_TEMP=55
+MIN_TEMP=60
 MAX_TEMP=70
-MIN_COEF=85
+MIN_COEF=80
 MAX_COEF=110
-MINER_STOP=1
-CRITICAL_TEMP_MINER_STOP=85
+MINER_STOP=0
+CRITICAL_TEMP_MINER_STOP=90
 PL_LIMIT=1
 CRITICAL_TEMP_PL=75
 
@@ -70,6 +70,7 @@ echo "${green}[Status]: ${reset}Config created."
 }
 
 function check_run {
+
 if [ ! -f "/home/user/xinit.user.sh" ]; then
 		touch /home/user/xinit.user.sh
 		chmod +x /home/user/xinit.user.sh
@@ -83,6 +84,7 @@ else
 					echo -n -e "${green}[Status]: ${reset}Autorun created.\n"
 		fi
 fi
+}
 
 function safe_mode {
 if [[ $1 == 1 ]]; then miner start; echo "${green}[Status]: ${reset} Miner started." 
@@ -91,6 +93,7 @@ fi
 }
 
 function clock_limit_mode {
+
 gpu_info=`nvidia-smi --query-gpu=power.min_limit,power.limit --format=csv,noheader,nounits -i $i`
 pl_min=`awk -F', ' '{print $1}' <<< $gpu_info`
 pl_cur=`awk -F', ' '{print $2}' <<< $gpu_info`
@@ -107,10 +110,12 @@ fi
 }
 
 function auto_fan {
+
 CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
 echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL\n"
 sleep 2
+
 while true
         do
 			[[ -e $CONF_FILE ]] && . $CONF_FILE
@@ -141,7 +146,7 @@ while true
 				[[ $GPU_TEMP -ge $CRITICAL_TEMP_MINER_STOP   &&  $MINER_STOP == 1 ]] && safe_mode 2
 				[[ $GPU_TEMP -ge $CRITICAL_TEMP_PL  &&  $PL_LIMIT == 1 ]] && clock_limit_mode $i
 				[[ $FAN_SPEED -gt 100 ]] && FAN_SPEED=100
-				nvidia-settings -a [gpu:$i]/GPUFanControlState=1 -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null
+				nvidia-settings -a [gpu:$i]/GPUFanControlState=1 -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null &
                 echo "GPU${i} ${GPU_TEMP}°C -> ${FAN_SPEED}%"
        done
 sleep $DELAY
@@ -197,6 +202,7 @@ if [[ $new_version != $VERSION ]]
 else echo "${green}[Status]:${reset}You use actual version $new_version"
 fi
 }
+
 [[ -e $CONF_FILE ]] && . $CONF_FILE 
 case $1 in
 	-r)
@@ -247,5 +253,5 @@ case $1 in
 		ghost_run
 	;;
 esac
-exit
 
+exit
