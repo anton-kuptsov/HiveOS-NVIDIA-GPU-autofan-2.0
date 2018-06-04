@@ -2,9 +2,9 @@
 
 ##############################################################
 ## Thank you very much for your support! It's very impotant!##
-##														    ##
+##							    ##
 ## Nicehash donate: 3JKA47P98c9JGCy3GN7qXFC2FzeuJmXuph	    ##
-## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T		    ##
+## Zec donate: t1fP9jWyqFEni2p4i9t3byqtimsMKv1y95T	    ##
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
@@ -19,7 +19,6 @@ MINER_STOP=1
 CRITICAL_TEMP_MINER_STOP=85
 PL_LIMIT=1
 CRITICAL_TEMP_PL=75
-
 
 VERSION="2.3"
 s_name="autofan.sh"
@@ -42,7 +41,6 @@ echo -n -e "${red}MAX_TEMP=$MAX_TEMP${reset}\n"
 read -p  "Enter MIN TEMP (current $MIN_TEMP): "
 [ ! -z "${REPLY##*[!0-9]*}" ] && MIN_TEMP=$REPLY
 echo -n -e "${red}MIN_TEMP=$MIN_TEMP${reset}\n"
-
 read -p  "Switch on MINER_STOP (1-YES/0-NO, current state $MINER_STOP): "
 [ ! -z "${REPLY##*[!0-9]*}" ] && [[ $REPLY < 2 ]] && MINER_STOP=$REPLY
 echo -n -e "${red}MINER_STOP=$MINER_STOP${reset}\n"
@@ -67,7 +65,6 @@ echo "${green}[Status]: ${reset}Config created."
 }
 
 function check_run {
-
 if [ ! -f "/home/user/xinit.user.sh" ]; then
 		touch /home/user/xinit.user.sh
 		chmod +x /home/user/xinit.user.sh
@@ -105,13 +102,11 @@ fi
 }
 
 function change_coef {
-
 if [[ $1 == 0 ]]; then 
 	screen_count=`screen -ls miner | grep miner | wc -l`
 	[[ $screen_count > 0 ]] && [[  $MIN_COEF > 70 ]] && MIN_COEF=$(( $MIN_COEF-1 )) && MAX_COEF=$(( $MAX_COEF-1 )) || echo "Low temp"
 else MIN_COEF=$(( $MIN_COEF+2 )) && MAX_COEF=$(( $MAX_COEF+2 ))
 fi
-
 #			
 echo -e " Set MIN_COEF ->$MIN_COEF & MAX_COEF ->$MAX_COEF"
 #
