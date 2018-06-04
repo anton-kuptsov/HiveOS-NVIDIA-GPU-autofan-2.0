@@ -106,7 +106,8 @@ if [[ $1 == 0 ]]; then
 	[[ $screen_count > 0 ]] && [[  $MIN_COEF > 70 ]] && MIN_COEF=$(( $MIN_COEF-1 )) && MAX_COEF=$(( $MAX_COEF-1 )) || echo "Low temp"
 else MIN_COEF=$(( $MIN_COEF+2 )) && MAX_COEF=$(( $MAX_COEF+2 ))
 fi
-#			
+#	
+[[  $MIN_COEF -gt 100 ]] && MIN_COEF=100 && MAX_COEF=130
 echo -e " Set MIN_COEF ->$MIN_COEF & MAX_COEF ->$MAX_COEF"
 #
 sed -i "s/\(MIN_COEF *= *\).*/\1$MIN_COEF/" $CONF_FILE && sed -i "s/\(MAX_COEF *= *\).*/\1$MAX_COEF/" $CONF_FILE
