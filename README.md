@@ -1,4 +1,4 @@
-# HiveOS NVIDIA GPU autofan v.2.2.2
+# HiveOS NVIDIA GPU autofan v.2.3. Smart.
 Nvidia gpu automatic fan speed script for HiveOS Ubuntu. Work on mixed RIGs with AMD and NVIDIA GPU's
 
 >If you're upgrade HiveOS via account on website or by command ```selfupgrade``` not need re-install the script.
