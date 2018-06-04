@@ -104,7 +104,7 @@ function change_coef {
 if [[ $1 == 0 ]]; then 
 	screen_count=`screen -ls miner | grep miner | wc -l`
 	[[ $screen_count > 0 ]] && [[  $MIN_COEF > 70 ]] && MIN_COEF=$(( $MIN_COEF-1 )) && MAX_COEF=$(( $MAX_COEF-1 )) || echo "Low temp"
-else [[  $MAX_COEF <100 ]] && MIN_COEF=$(( $MIN_COEF+2 )) && MAX_COEF=$(( $MAX_COEF+2 ))
+else [[  $MIN_COEF <100 ]] && MIN_COEF=$(( $MIN_COEF+2 )) && MAX_COEF=$(( $MAX_COEF+2 ))
 fi
 #			
 echo -e " Set MIN_COEF ->$MIN_COEF & MAX_COEF ->$MAX_COEF"
