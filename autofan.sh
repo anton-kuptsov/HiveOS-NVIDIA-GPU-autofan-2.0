@@ -8,9 +8,10 @@
 ## ETH donate: 0xe835a7d5605a370e4750279b28f9ce0926061ea2   ##
 ##############################################################
 
+
 DELAY=30
 MIN_SPEED=40
-MIN_TEMP=60 
+MIN_TEMP=55 
 MAX_TEMP=65
 MIN_COEF=80
 MAX_COEF=110
@@ -19,7 +20,7 @@ CRITICAL_TEMP_MINER_STOP=85
 PL_LIMIT=1
 CRITICAL_TEMP_PL=75
 
-VERSION="2.3"
+VERSION="2.3.1"
 s_name="autofan.sh"
 CONF_FILE="/home/user/autofan.conf"
 export DISPLAY=:0
@@ -40,6 +41,16 @@ echo -n -e "${red}MAX_TEMP=$MAX_TEMP${reset}\n"
 read -p  "Enter MIN TEMP (current $MIN_TEMP): "
 [ ! -z "${REPLY##*[!0-9]*}" ] && MIN_TEMP=$REPLY
 echo -n -e "${red}MIN_TEMP=$MIN_TEMP${reset}\n"
+#SU
+if [[ $1 == 1 ]]; then
+read -p  "Enter MIN_COEF (current $MIN_COEF): "
+[ ! -z "${REPLY##*[!0-9]*}" ] && MIN_COEF=$REPLY
+echo -n -e "${red}MIN_COEF=$MIN_COEF${reset}\n"
+read -p  "Enter MAX_COEF (current $MAX_COEF): "
+[ ! -z "${REPLY##*[!0-9]*}" ] && MAX_COEF=$REPLY
+echo -n -e "${red}MAX_COEF=$MAX_COEF${reset}\n"
+fi
+#
 read -p  "Switch on MINER_STOP (1-YES/0-NO, current state $MINER_STOP): "
 [ ! -z "${REPLY##*[!0-9]*}" ] && [[ $REPLY < 2 ]] && MINER_STOP=$REPLY
 echo -n -e "${red}MINER_STOP=$MINER_STOP${reset}\n"
@@ -56,6 +67,8 @@ if [[ $PL_LIMIT == 1 ]]; then
 		[ ! -z "${REPLY##*[!0-9]*}" ] && CRITICAL_TEMP_PL=$REPLY
 		echo -n -e "${red}CRITICAL_TEMP_PL=$CRITICAL_TEMP_PL${reset}\n"
 fi
+
+
 echo "Creating config..."
 [ ! -f $CONF_FILE ] &&	touch $CONF_FILE
 echo -n > $CONF_FILE
@@ -104,10 +117,9 @@ function change_coef {
 if [[ $1 == 0 ]]; then 
 	screen_count=`screen -ls miner | grep miner | wc -l`
 	[[ $screen_count > 0 ]] && [[  $MIN_COEF > 70 ]] && MIN_COEF=$(( $MIN_COEF-1 )) && MAX_COEF=$(( $MAX_COEF-1 )) || echo "Low temp"
-else MIN_COEF=$(( $MIN_COEF+2 )) && MAX_COEF=$(( $MAX_COEF+2 ))
+else [[  $MIN_COEF -lt 90 ]] && MIN_COEF=$(( $MIN_COEF+2 )) && MAX_COEF=$(( $MAX_COEF+2 ))
 fi
-#	
-[[  $MIN_COEF -gt 100 ]] && MIN_COEF=100 && MAX_COEF=130
+#			
 echo -e " Set MIN_COEF ->$MIN_COEF & MAX_COEF ->$MAX_COEF"
 #
 sed -i "s/\(MIN_COEF *= *\).*/\1$MIN_COEF/" $CONF_FILE && sed -i "s/\(MAX_COEF *= *\).*/\1$MAX_COEF/" $CONF_FILE
@@ -118,7 +130,6 @@ function auto_fan {
 CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
 echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL\n"
-sleep 2
 while true
         do
 			[[ -e $CONF_FILE ]] && . $CONF_FILE
@@ -144,9 +155,11 @@ while true
 					 if [[ -n $PREV_TEMP_ALL && $(( $GPU_TEMP+1 )) -eq ${PREV_TEMP_ALL[$i]} ]]; then
 								FAN_SPEED=$(( ${PREV_FAN_ALL[$i]}-1 )) 
 					 			# echo "     GPU${i}: FAN_SPEED->$FAN_SPEED" 
-					 elif [[ $GPU_TEMP > ${PREV_TEMP_ALL[$i]} ]]; then
+					 elif [[ $GPU_TEMP -ne ${PREV_TEMP_ALL[$i]} ]]; then
 							FAN_SPEED=$((  $GPU_TEMP *(($GPU_TEMP - $MIN_TEMP) * 4 + $MIN_COEF)/100 ))
-					 else FAN_SPEED=${PREV_FAN_ALL[i]}
+					 					 
+					 else  FAN_SPEED=${PREV_FAN_ALL[i]}
+					 
 					 fi
 
 				elif [[ $GPU_TEMP -gt $MAX_TEMP ]]
@@ -230,6 +243,10 @@ case $1 in
 	
 	-s)
 		set_var
+	;;
+	
+	-su)
+		set_var 1
 	;;
 	
 	-g)
