@@ -1,3 +1,7 @@
+# v.2.3     2018-06-04
+- smart automatic fan adjustment
+- reduced number of settings
+
 # v.2.2.2   2018-05-30
 - bug fix and some code optimization
 
