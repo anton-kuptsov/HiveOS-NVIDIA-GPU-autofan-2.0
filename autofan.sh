@@ -11,16 +11,16 @@
 
 DELAY=30
 MIN_SPEED=40
-MIN_TEMP=55 
+MIN_TEMP=60 
 MAX_TEMP=65
 MIN_COEF=80
 MAX_COEF=110
 MINER_STOP=1
-CRITICAL_TEMP_MINER_STOP=85
-PL_LIMIT=1
-CRITICAL_TEMP_PL=75
+CRITICAL_TEMP_MINER_STOP=75
+PL_LIMIT=0
+CRITICAL_TEMP_PL=70
 
-VERSION="2.3.1"
+VERSION="2.3.2"
 s_name="autofan.sh"
 CONF_FILE="/home/user/autofan.conf"
 export DISPLAY=:0
@@ -119,17 +119,17 @@ if [[ $1 == 0 ]]; then
 	[[ $screen_count > 0 ]] && [[  $MIN_COEF > 70 ]] && MIN_COEF=$(( $MIN_COEF-1 )) && MAX_COEF=$(( $MAX_COEF-1 )) || echo "Low temp"
 else [[  $MIN_COEF -lt 90 ]] && MIN_COEF=$(( $MIN_COEF+2 )) && MAX_COEF=$(( $MAX_COEF+2 ))
 fi
-#			
 echo -e " Set MIN_COEF ->$MIN_COEF & MAX_COEF ->$MAX_COEF"
-#
 sed -i "s/\(MIN_COEF *= *\).*/\1$MIN_COEF/" $CONF_FILE && sed -i "s/\(MAX_COEF *= *\).*/\1$MAX_COEF/" $CONF_FILE
 CHANGE_COEF_FLAG=
-
 }
+
 function auto_fan {
 CARDS_NUM=`nvidia-smi -L | wc -l`
 echo "Found ${CARDS_NUM} GPU(s)"
+nvidia-smi -pm 1 > /dev/null 2>&1  #enable persistence mode (PM) for the driver
 echo -e -n "${green}Current AUTOFAN settings:${reset}\nDELAY=$DELAY\nMIN_SPEED=$MIN_SPEED\nMIN_TEMP=$MIN_TEMP\nMAX_TEMP=$MAX_TEMP\nMIN_COEF=$MIN_COEF\nMAX_COEF=$MAX_COEF\nMINER_STOP=$MINER_STOP\nCRITICAL_TEMP_MINER_STOP=$CRITICAL_TEMP_MINER_STOP\nPL_LIMIT=$PL_LIMIT\nCRITICAL_TEMP_PL=$CRITICAL_TEMP_PL\n"
+#sleep 1
 while true
         do
 			[[ -e $CONF_FILE ]] && . $CONF_FILE
@@ -152,19 +152,16 @@ while true
 						MINER_STOP=1
                 elif [[ $GPU_TEMP -ge $MIN_TEMP  &&  $GPU_TEMP -le $MAX_TEMP ]]
                     then
-					 if [[ -n $PREV_TEMP_ALL && $(( $GPU_TEMP+1 )) -eq ${PREV_TEMP_ALL[$i]} ]]; then
+					FAN_SPEED=$((  $GPU_TEMP *(($GPU_TEMP - $MIN_TEMP) * 4 + $MIN_COEF)/100 ))
+					 if [[ -n $PREV_TEMP_ALL && $(( $GPU_TEMP+1 )) -eq ${PREV_TEMP_ALL[$i]} && $MAX_TEMP -ge ${PREV_TEMP_ALL[$i]} ]]; then
 								FAN_SPEED=$(( ${PREV_FAN_ALL[$i]}-1 )) 
-					 			# echo "     GPU${i}: FAN_SPEED->$FAN_SPEED" 
-					 elif [[ $GPU_TEMP -ne ${PREV_TEMP_ALL[$i]} ]]; then
-							FAN_SPEED=$((  $GPU_TEMP *(($GPU_TEMP - $MIN_TEMP) * 4 + $MIN_COEF)/100 ))
-					 					 
-					 else  FAN_SPEED=${PREV_FAN_ALL[i]}
-					 
+					elif [[ -n $PREV_TEMP_ALL && $GPU_TEMP -eq ${PREV_TEMP_ALL[$i]} ]]; then
+							FAN_SPEED=${PREV_FAN_ALL[i]}
 					 fi
 
 				elif [[ $GPU_TEMP -gt $MAX_TEMP ]]
                     then
-						CHANGE_COEF_FLAG=1
+						CHANGE_COEF_FLAG=1 
 						FAN_SPEED=$(( $GPU_TEMP *(($GPU_TEMP - $MAX_TEMP) * 4 + $MAX_COEF)/100 ))
                 fi
 				[[ $GPU_TEMP -ge $CRITICAL_TEMP_MINER_STOP   &&  $MINER_STOP == 1 ]] && safe_mode 2
@@ -275,7 +272,7 @@ case $1 in
 					GPU_FAN_C=`nvidia-smi -i $i --query-gpu=fan.speed --format=csv,noheader`
 					echo "GPU${i} ${GPU_TEMP_C}°C - ${GPU_FAN_C}"
 			done
-		sleep $DELAY 
+		sleep 15 
 		done
 	;;
 	-k)
