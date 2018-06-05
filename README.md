@@ -47,7 +47,7 @@ The script has the following startup keys:
 
 **-s** 		- start setup settings (terminate by Ctrl+C). Don't need restart the script.
 
-**-su**		- setup settings (editting ```MIN_COEF``` and ```MAX_COEF```)
+**-su**		- setup settings (can edit ```MIN_COEF``` and ```MAX_COEF```)
 
 **-g** 		- running script in GHOST mode or SCREEN mode (terminate by Ctrl+C)
 
