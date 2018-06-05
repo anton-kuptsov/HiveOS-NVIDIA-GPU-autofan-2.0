@@ -1,3 +1,7 @@
+# v.2.3.2     2018-06-04
+- su key added
+- bug fixed
+
 # v.2.3.1     2018-06-04
 - bug fixed
 
