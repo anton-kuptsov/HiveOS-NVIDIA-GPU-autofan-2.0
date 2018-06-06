@@ -167,7 +167,7 @@ while true
 				[[ $GPU_TEMP -ge $CRITICAL_TEMP_MINER_STOP   &&  $MINER_STOP == 1 ]] && safe_mode 2
 				[[ $GPU_TEMP -ge $CRITICAL_TEMP_PL  &&  $PL_LIMIT == 1 ]] && clock_limit_mode $i
 				[[ $FAN_SPEED -gt 100 ]] && FAN_SPEED=100
-				nvidia-settings -a [gpu:$i]/GPUFanControlState=1 -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null 2>&1 &
+				nvidia-settings -a [gpu:$i]/GPUFanControlState=1 -a [fan:$i]/GPUTargetFanSpeed=$FAN_SPEED > /dev/null 2>&1
                 echo "GPU${i} ${GPU_TEMP}°C -> ${FAN_SPEED}%"
 				PREV_FAN_ALL[$i]=$FAN_SPEED
 				PREV_TEMP_ALL[$i]=$GPU_TEMP
