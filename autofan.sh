@@ -20,7 +20,7 @@ CRITICAL_TEMP_MINER_STOP=75
 PL_LIMIT=0
 CRITICAL_TEMP_PL=70
 
-VERSION="2.3.2"
+VERSION="2.3.2.1"
 s_name="autofan.sh"
 CONF_FILE="/home/user/autofan.conf"
 export DISPLAY=:0
