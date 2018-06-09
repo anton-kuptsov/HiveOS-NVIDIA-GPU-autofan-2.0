@@ -1,3 +1,6 @@
+# v.2.3.4     2018-06-09
+- some speed optimization
+
 # v.2.3.3     2018-06-06
 - bug fixed
 
