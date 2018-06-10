@@ -59,7 +59,7 @@ The script has the following startup keys:
 
 **-u**		- selfupdate
 
-**-d**		- restore HiveOS OC settings and turn off AUTOFAN (to switch on again run script in GHOST mode)
+**-d**		- restore HiveOS OC settings and turn off AUTOFAN (to turn on again run script in GHOST mode)
 
   Run without any keys has follow steps: 
   - start setup settings
