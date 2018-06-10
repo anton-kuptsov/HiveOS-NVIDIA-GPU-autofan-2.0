@@ -1,5 +1,5 @@
 # v.2.4     2018-06-10
-- restore HiveOS OC settings
+- restore HiveOS OC settings and turn off script (-d key)
 
 # v.2.3.4     2018-06-09
 - some speed optimization
