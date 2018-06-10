@@ -215,6 +215,7 @@ echo "${green}[Status]:${reset} Checking..."
 new_version=`wget -q -O- https://raw.githubusercontent.com/Steambot33/HiveOS-NVIDIA-GPU-autofan-2.0/master/version | head`
 if [[ $new_version != $VERSION ]] 
 		then 
+		echo "${red}CURRENT VERSION $VERSION ${reset}"
 		echo "${green}NEW VERSION $new_version ${reset}"
 		read -p  "Continue update? (y/n)"
 		if [[ $REPLY = "y" ]]
@@ -237,7 +238,6 @@ fi
 }
 
 set_default() {
-
 nvidia-oc > /dev/null 2>&1
 DEFAULT=1
 create_config
