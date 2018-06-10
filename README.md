@@ -1,4 +1,4 @@
-# HiveOS NVIDIA GPU autofan v.2.3.4
+# HiveOS NVIDIA GPU autofan v.2.4
 Nvidia gpu automatic fan speed script for HiveOS Ubuntu. 
 
 The script has an intellectual adjustment. You need to set the range of the desired temperature. During the work the script will adjust the necessary parameters. After some time after starting the fan speed will be more stable in the specified temperature range.
@@ -58,6 +58,8 @@ The script has the following startup keys:
 **-k** 		- kill script
 
 **-u**		- selfupdate
+
+**-d**		- restore HiveOS OC settings and switch off AUTOFAN
 
   Run without any keys has follow steps: 
   - start setup settings
