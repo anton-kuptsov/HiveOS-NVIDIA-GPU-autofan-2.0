@@ -1,3 +1,6 @@
+# v.2.4     2018-06-10
+- restore HiveOS OC settings
+
 # v.2.3.4     2018-06-09
 - some speed optimization
 
