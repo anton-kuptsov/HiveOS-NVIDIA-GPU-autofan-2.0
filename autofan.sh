@@ -21,7 +21,7 @@ PL_LIMIT=0
 CRITICAL_TEMP_PL=70
 DEFAULT=0
 
-VERSION="2.4"  #last version
+VERSION="2.4"  
 s_name="/home/user/autofan.sh"
 xinit="/home/user/xinit.user.sh"
 CONF_FILE="/home/user/autofan.conf"
