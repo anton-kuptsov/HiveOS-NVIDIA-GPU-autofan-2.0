@@ -11,7 +11,7 @@
 
 DELAY=30
 MIN_SPEED=40
-MIN_TEMP=60 
+MIN_TEMP=60
 MAX_TEMP=65
 MIN_COEF=80
 MAX_COEF=110
@@ -21,7 +21,7 @@ PL_LIMIT=0
 CRITICAL_TEMP_PL=70
 DEFAULT=0
 
-VERSION="2.4"
+VERSION="2.4"  #last version
 s_name="/home/user/autofan.sh"
 xinit="/home/user/xinit.user.sh"
 CONF_FILE="/home/user/autofan.conf"
