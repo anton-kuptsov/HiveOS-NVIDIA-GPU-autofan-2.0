@@ -1,5 +1,5 @@
 # NEWS
-**The script will soon be integrated in to HiveOS**
+**The script will soon be integrated into HiveOS**
 
 # HiveOS NVIDIA GPU autofan v.2.4
 Nvidia gpu automatic fan speed script for HiveOS Ubuntu. 
