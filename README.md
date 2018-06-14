@@ -17,7 +17,7 @@ Use and change at your own risk! Not responsible for any damages or issues, chan
 # Install
 1. **```cd /home/user```** (go to ```/home/user``` directory on your HiveOS).
 >Check current dir by command ```pwd```. For navigation use commands : ```cd ~``` (go to home dir),  ```cd ..``` (level up), ```cd dir``` (move to dir)
-2. **```wget https://git.io/vhr1n```** (download the script)
+2. **```wget -O autofan.sh https://git.io/vhr1n```** (download the script)
 >Or download and put autofan.sh via your sftp manager
 
 3.**```chmod +x autofan.sh```** (change permission to 755 for run)
