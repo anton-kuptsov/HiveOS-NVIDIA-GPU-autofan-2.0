@@ -1,7 +1,6 @@
 # NEWS
-**The script was integrated into HiveOS release 0.5-59**
-
-**Check updates.**
+**The script was integrated into** [**HiveOS**](https://goo.gl/qXNH54) **release 0.5-59**
+ 
 
 # Donate
 
